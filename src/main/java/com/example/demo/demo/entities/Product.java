@@ -47,6 +47,10 @@ public class Product extends BaseEntity{
 
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public void setId(Long id) {
     this.id = id;
   }
@@ -106,13 +110,4 @@ public class Product extends BaseEntity{
   public void setCategory(Category category) {
     this.category = category;
   }
-
-//  public void setId(String id) {
-//    this.id = id;
-//  }
-//
-//  @Id
-//  public String getId() {
-//    return id;
-//  }
 }
