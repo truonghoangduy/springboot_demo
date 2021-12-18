@@ -31,7 +31,7 @@ public class DemoController {
 
   @GetMapping("/")
   public String helloWord() {
-    return "index";
+    return "product";
   }
 
 }
