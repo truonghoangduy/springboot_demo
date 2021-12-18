@@ -1,7 +1,9 @@
 package com.example.demo.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,12 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-
-@Entity
 @Table
+@Entity
 public class Product extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,11 +25,15 @@ public class Product extends BaseEntity{
   private Long quantity;
   private String imageURL;
   private Float promotion_price;
-  @OneToOne(fetch = FetchType.EAGER,targetEntity = Category.class)
+  @ManyToOne(fetch = FetchType.EAGER,targetEntity = Category.class)
   @JoinColumn(name = "category_id", nullable = false)
-  @JsonBackReference
+  @JsonManagedReference
   @NotNull
   private Category category;
+
+//  @OneToMany(mappedBy="order")
+//  @JsonBackReference
+//  private List<OrderDetail> orderDetails;
 
   public Product(Long id, String name, String description, Float price, Long quantity,
       String imageURL, Float promotion_price, Category category) {
@@ -41,6 +45,7 @@ public class Product extends BaseEntity{
     this.imageURL = imageURL;
     this.promotion_price = promotion_price;
     this.category = category;
+    //this.orderDetails = orderDetails;
   }
 
   public Product() {
@@ -110,4 +115,12 @@ public class Product extends BaseEntity{
   public void setCategory(Category category) {
     this.category = category;
   }
+
+//  public List<OrderDetail> getOrderDetails() {
+//    return orderDetails;
+//  }
+//
+//  public void setOrderDetails(List<OrderDetail> orderDetails) {
+//    this.orderDetails = orderDetails;
+//  }
 }
