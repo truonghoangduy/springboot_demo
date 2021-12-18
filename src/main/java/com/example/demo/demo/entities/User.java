@@ -6,31 +6,28 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table
 @Entity
-public class Category extends BaseEntity{
+public class User extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String name;
-  private String description;
-
-//  @OneToMany(mappedBy="category")
+  private String password;
+//  @OneToMany(mappedBy="user")
 //  @JsonBackReference
-//  private List<Product> products;
+//  private List<Order> orders;
 
-  public Category(Long id, String name, String description,
-      List<Product> products) {
+  public User(Long id, String name, String password) {
     this.id = id;
     this.name = name;
-    this.description = description;
-    //this.products = products;
+    this.password = password;
+    //this.orders = orders;
   }
 
-  public Category() {
+  public User() {
 
   }
 
@@ -50,19 +47,19 @@ public class Category extends BaseEntity{
     this.name = name;
   }
 
-  public String getDescription() {
-    return description;
+  public String getPassword() {
+    return password;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
-//  public List<Product> getProducts() {
-//    return products;
+//  public List<Order> getOrders() {
+//    return orders;
 //  }
 //
-//  public void setProducts(List<Product> products) {
-//    this.products = products;
+//  public void setOrders(List<Order> orders) {
+//    this.orders = orders;
 //  }
 }
