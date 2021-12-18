@@ -15,10 +15,14 @@ public class ProductServiceImpl implements IProductService{
   @Autowired
   IProductRepository productRepository;
 
+  @Autowired
+  ICategoryRepository categoryRepository;
+
   @Override
   public List<Product> findAll() {
     return productRepository.findAll();
   }
+
 
   @Override
   public Optional<Product> findById(Long id) {

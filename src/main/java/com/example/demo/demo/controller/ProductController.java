@@ -30,29 +30,26 @@ public class ProductController {
 
   @PostMapping
   public ResponseEntity<?> createProduct(@RequestBody Product product){
-    //Product product1 = new Product();
-    if(product == null){
-      return new ResponseEntity<>(new ResponseMessange("maybe you are missing some data!"), HttpStatus.OK);
+
+    Long cateId = product.getCategory().getId();
+    if(cateId == null){
+      return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
     }
-//    if(product.getName().trim().isEmpty() || product.getCategory() == null ||
-//    product.getDescription().trim().isEmpty() || product.getPrice() == null ||
-//    product.getQuantity().intValue()==0 || product.getImageURL().trim().isEmpty() ||
-//    product.getPromotion_price() == null){
-//      return new ResponseEntity<>(new ResponseMessange("Name is required!"), HttpStatus.OK);
+//    Optional<Category> category = categoryService.findById(cateId);
+//    if(product == null){
+//      return new ResponseEntity<>(new ResponseMessange("maybe you are missing some data!"), HttpStatus.OK);
 //    }
-//    product = product1;
+    if(product.getName().trim().isEmpty() || product.getCategory() == null ||
+    product.getDescription().trim().isEmpty() || product.getPrice() == null ||
+    product.getQuantity().intValue()==0 || product.getImageURL().trim().isEmpty() ||
+    product.getPromotion_price() == null){
+      return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
+    }
+
     productService.save(product);
     return new ResponseEntity<>(new ResponseMessange("Create product success!"), HttpStatus.OK);
   }
-//  @PostMapping
-//  public ResponseEntity<?> createProduct(@RequestBody Product product){
-//    try {
-//      Product result = productService.save(product);
-//      return new ResponseEntity<>(result, HttpStatus.OK);
-//    } catch (IllegalArgumentException ex) {
-//      return new ResponseEntity(ex.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
-//    }
-//  }
+
 
   @GetMapping
   public ResponseEntity<?> getListProduct(){
@@ -70,28 +67,36 @@ public class ProductController {
     }
     return new ResponseEntity<>(product, HttpStatus.OK);
   }
-//  @PutMapping("/{id}")
-//  public ResponseEntity<?> updateCategory(@RequestBody Category category,@PathVariable Long id){
-//    Optional<Product> product = productService.findById(id);
-//    if(!product.isPresent()){
-//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
-//    if(product.getName().trim().isEmpty() || category.getDescription().trim().isEmpty()){
-//      return new ResponseEntity<>(new ResponseMessange("Name or Description is required!"),HttpStatus.OK);
-//    }
-//    category1.get().setName(category.getName());
-//    category1.get().setDescription(category.getDescription());
-//    categoryService.save(category1.get());
-//    return new ResponseEntity<>(new ResponseMessange("Update success!"), HttpStatus.OK);
-//  }
-//
-//  @DeleteMapping("/{id}")
-//  public ResponseEntity<?> deleteCategoryById(@PathVariable Long id){
-//    Optional<Category> category = categoryService.findById(id);
-//    if(!category.isPresent()){
-//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
-//    categoryService.delete(category.get().getId());
-//    return new ResponseEntity<>( new ResponseMessange("Delete success!"), HttpStatus.OK);
-//  }
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateProduct(@RequestBody Product product,@PathVariable Long id){
+    Optional<Product> product1 = productService.findById(id);
+    if(!product1.isPresent()){
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    if(product.getName().trim().isEmpty() || product.getCategory() == null ||
+        product.getDescription().trim().isEmpty() || product.getPrice() == null ||
+        product.getQuantity().intValue()==0 || product.getImageURL().trim().isEmpty() ||
+        product.getPromotion_price() == null){
+      return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
+    }
+    product1.get().setName(product.getName());
+    product1.get().setDescription(product.getDescription());
+    product1.get().setPrice(product.getPrice());
+    product1.get().setImageURL(product.getImageURL());
+    product1.get().setQuantity(product.getQuantity());
+    product1.get().setPromotion_price(product.getPromotion_price());
+    product1.get().setCategory(product.getCategory());
+    productService.save(product1.get());
+    return new ResponseEntity<>(new ResponseMessange("Update success!"), HttpStatus.OK);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteProductById(@PathVariable Long id){
+    Optional<Product> product = productService.findById(id);
+    if(!product.isPresent()){
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    productService.delete(product.get().getId());
+    return new ResponseEntity<>( new ResponseMessange("Delete success!"), HttpStatus.OK);
+  }
 }
