@@ -5,6 +5,7 @@ import com.example.demo.demo.entities.Product;
 import com.example.demo.demo.repository.Category.ICategoryRepository;
 import com.example.demo.demo.response.ResponseMessange;
 import com.example.demo.demo.services.Category.CategoryServiceImpl;
+import com.example.demo.demo.services.Image.ImageService;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,9 @@ public class ProductController {
 
   @Autowired
   CategoryServiceImpl categoryService;
+
+  @Autowired
+  ImageService imageService;
 
   @PostMapping
   @ResponseBody
