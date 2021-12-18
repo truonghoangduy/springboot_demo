@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -24,14 +24,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
+    <tr th:each="product : ${listOfProduct}">
+        <th scope="row" th:text="${product.getId()}"></th>
+        <td th:text="${product.getName()}"></td>
+        <td th:text="${product.getDescription()}"></td>
+        <td th:text="${product.getPrice()}"></td>
+        <td th:text="${product.getQuantity()}"></td>
+        <td th:text="${product.getPromotion_price()}"></td>
+        <td th:text="${product.getCategory().getName()}"></td>
         <td><button type="button" class="btn btn-primary">Update</button></td>
         <td><button type="button" class="btn btn-danger">Delete</button></td>
 
