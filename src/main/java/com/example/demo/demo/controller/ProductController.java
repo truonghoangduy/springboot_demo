@@ -2,6 +2,7 @@ package com.example.demo.demo.controller;
 
 import com.example.demo.demo.entities.Category;
 import com.example.demo.demo.entities.Product;
+import com.example.demo.demo.repository.Category.ICategoryRepository;
 import com.example.demo.demo.response.ResponseMessange;
 import com.example.demo.demo.services.Category.CategoryServiceImpl;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
@@ -10,6 +11,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("product")
 public class ProductController {
   @Autowired
@@ -29,6 +33,7 @@ public class ProductController {
   CategoryServiceImpl categoryService;
 
   @PostMapping
+  @ResponseBody
   public ResponseEntity<?> createProduct(@RequestBody Product product){
 
     Long cateId = product.getCategory().getId();
@@ -52,6 +57,7 @@ public class ProductController {
 
 
   @GetMapping
+  @ResponseBody
   public ResponseEntity<?> getListProduct(){
     List<Product> products = productService.findAll();
     if(products.isEmpty()){
@@ -60,6 +66,7 @@ public class ProductController {
     return new ResponseEntity<>(products , HttpStatus.OK);
   }
   @GetMapping("/{id}")
+  @ResponseBody
   public ResponseEntity<?> getDetailProduct(@PathVariable Long id){
     Optional<Product> product = productService.findById(id);
     if(!product.isPresent()){
@@ -68,6 +75,7 @@ public class ProductController {
     return new ResponseEntity<>(product, HttpStatus.OK);
   }
   @PutMapping("/{id}")
+  @ResponseBody
   public ResponseEntity<?> updateProduct(@RequestBody Product product,@PathVariable Long id){
     Optional<Product> product1 = productService.findById(id);
     if(!product1.isPresent()){
@@ -91,6 +99,7 @@ public class ProductController {
   }
 
   @DeleteMapping("/{id}")
+  @ResponseBody
   public ResponseEntity<?> deleteProductById(@PathVariable Long id){
     Optional<Product> product = productService.findById(id);
     if(!product.isPresent()){
@@ -98,5 +107,18 @@ public class ProductController {
     }
     productService.delete(product.get().getId());
     return new ResponseEntity<>( new ResponseMessange("Delete success!"), HttpStatus.OK);
+  }
+
+  @Autowired
+  ICategoryRepository categoryRepository;
+  @GetMapping("/edit/{id}")
+  public String editProductById(@PathVariable Long id, Model model){
+    Optional<Product> product = productService.findById(id);
+    if(!product.isPresent()){
+      return "404";
+    }
+    model.addAttribute("product",product.get());
+    model.addAttribute("listOfCategory",categoryRepository.findAll());
+    return "product_upload";
   }
 }
