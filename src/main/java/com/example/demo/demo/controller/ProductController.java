@@ -7,6 +7,8 @@ import com.example.demo.demo.response.ResponseMessange;
 import com.example.demo.demo.services.Category.CategoryServiceImpl;
 import com.example.demo.demo.services.Image.ImageService;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class ProductController {
 
   @PostMapping
   @ResponseBody
-  public ResponseEntity<?> createProduct(@RequestBody Product product){
+  public ResponseEntity<?> createProduct(@RequestBody Product product, @RequestParam("file") MultipartFile[] files) throws IOException {
 
     Long cateId = product.getCategory().getId();
     if(cateId == null){
@@ -47,7 +49,7 @@ public class ProductController {
     product.getPromotion_price() == null){
       return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
     }
-
+    //String fileName = ImageService.uploadFile(files[0]);
     productService.save(product);
     return new ResponseEntity<>(new ResponseMessange("Create product success!"), HttpStatus.OK);
   }
@@ -124,6 +126,7 @@ public class ProductController {
     for (MultipartFile file: files){
       try{
         String fileName = ImageService.uploadFile(file);
+        return new ResponseEntity<String>(fileName, HttpStatus.OK);
       }catch (Exception e){
 
       }

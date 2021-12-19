@@ -38,7 +38,6 @@ public class ImageService {
         Bucket bucket = StorageClient.getInstance().bucket();
         String name =  UUID.randomUUID().toString() + StringUtils.getFilenameExtension(file.getOriginalFilename());
         bucket.create(name, file.getBytes(), file.getContentType());
-
         return name;
     }
 
