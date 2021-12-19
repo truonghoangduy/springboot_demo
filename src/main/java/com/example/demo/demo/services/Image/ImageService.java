@@ -41,4 +41,7 @@ public class ImageService {
         return name;
     }
 
+    public static String createURI(String name){
+        return "https://firebasestorage.googleapis.com/v0/b/demobackbonejs-3fa77.appspot.com/o/"+name+"?alt=media&";
+    }
 }
