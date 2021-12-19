@@ -126,7 +126,8 @@ public class ProductController {
     for (MultipartFile file: files){
       try{
         String fileName = ImageService.uploadFile(file);
-        return new ResponseEntity<String>(fileName, HttpStatus.OK);
+        String URIImage = ImageService.createURI(fileName);
+        return new ResponseEntity<String>(URIImage, HttpStatus.OK);
       }catch (Exception e){
 
       }
