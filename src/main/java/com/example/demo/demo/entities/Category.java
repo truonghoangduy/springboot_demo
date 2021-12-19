@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Table
 @Entity
+@Table
 public class Category extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,16 +18,16 @@ public class Category extends BaseEntity{
   private String name;
   private String description;
 
-//  @OneToMany(mappedBy="category")
-//  @JsonBackReference
-//  private List<Product> products;
+  @OneToMany(mappedBy="category")
+  @JsonBackReference
+  private List<Product> products;
 
   public Category(Long id, String name, String description,
       List<Product> products) {
     this.id = id;
     this.name = name;
     this.description = description;
-    //this.products = products;
+    this.products = products;
   }
 
   public Category() {
@@ -58,11 +58,11 @@ public class Category extends BaseEntity{
     this.description = description;
   }
 
-//  public List<Product> getProducts() {
-//    return products;
-//  }
-//
-//  public void setProducts(List<Product> products) {
-//    this.products = products;
-//  }
+  public List<Product> getProducts() {
+    return products;
+  }
+
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
 }

@@ -6,25 +6,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Table
 @Entity
+@Table(name="users")
 public class User extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String name;
   private String password;
-//  @OneToMany(mappedBy="user")
-//  @JsonBackReference
-//  private List<Order> orders;
+  @OneToMany(mappedBy="user")
+  //@JsonBackReference
+  private List<Order> orders;
 
-  public User(Long id, String name, String password) {
+  public User(Long id, String name, String password,
+      List<Order> orders) {
     this.id = id;
     this.name = name;
     this.password = password;
-    //this.orders = orders;
+    this.orders = orders;
   }
 
   public User() {
@@ -55,11 +57,11 @@ public class User extends BaseEntity{
     this.password = password;
   }
 
-//  public List<Order> getOrders() {
-//    return orders;
-//  }
-//
-//  public void setOrders(List<Order> orders) {
-//    this.orders = orders;
-//  }
+  public List<Order> getOrders() {
+    return orders;
+  }
+
+  public void setOrders(List<Order> orders) {
+    this.orders = orders;
+  }
 }

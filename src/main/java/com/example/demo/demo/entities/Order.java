@@ -11,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Table
 @Entity
+@Table(name="orders")
 public class Order extends BaseEntity{
 
   @Id
@@ -24,7 +25,6 @@ public class Order extends BaseEntity{
   private String status;
   private String ship_address;
   private String phone;
-
   @ManyToOne(fetch = FetchType.EAGER,targetEntity = User.class)
   @JoinColumn(name = "user_id", nullable = false)
   @JsonManagedReference
@@ -32,19 +32,19 @@ public class Order extends BaseEntity{
   private User user;
 
 
-//  @OneToMany(mappedBy="order")
-//  @JsonBackReference
-//  private List<OrderDetail> orderDetails;
+  @OneToMany(mappedBy="order")
+  //@JsonBackReference
+  private List<OrderDetail> orderDetails;
 
   public Order(Long id, Float total, String status, String ship_address, String phone,
-      User user) {
+      User user, List<OrderDetail> orderDetails) {
     this.id = id;
     this.total = total;
     this.status = status;
     this.ship_address = ship_address;
     this.phone = phone;
     this.user = user;
-    //this.orderDetails = orderDetails;
+    this.orderDetails = orderDetails;
   }
 
   public Order() {
@@ -99,11 +99,11 @@ public class Order extends BaseEntity{
     this.user = user;
   }
 
-//  public List<OrderDetail> getOrderDetails() {
-//    return orderDetails;
-//  }
-//
-//  public void setOrderDetails(List<OrderDetail> orderDetails) {
-//    this.orderDetails = orderDetails;
-//  }
+  public List<OrderDetail> getOrderDetails() {
+    return orderDetails;
+  }
+
+  public void setOrderDetails(List<OrderDetail> orderDetails) {
+    this.orderDetails = orderDetails;
+  }
 }
