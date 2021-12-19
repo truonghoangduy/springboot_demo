@@ -1,16 +1,18 @@
 package com.example.demo.demo.services.Image;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.UUID;
 
 @Service
 public class ImageService {
@@ -32,8 +34,12 @@ public class ImageService {
         Bucket bucket = StorageClient.getInstance().bucket();
     }
 
-//    public Message uploadFile(File file) throws IOException {
-//        BlobId blobId =
-//    }
+    public static String uploadFile(MultipartFile file) throws IOException {
+        Bucket bucket = StorageClient.getInstance().bucket();
+        String name =  UUID.randomUUID().toString() + StringUtils.getFilenameExtension(file.getOriginalFilename());
+        bucket.create(name, file.getBytes(), file.getContentType());
+
+        return name;
+    }
 
 }
