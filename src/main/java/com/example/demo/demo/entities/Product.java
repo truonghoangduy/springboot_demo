@@ -11,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@Table
 @Entity
+@Table
 public class Product extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,12 +32,13 @@ public class Product extends BaseEntity{
   @NotNull
   private Category category;
 
-//  @OneToMany(mappedBy="order")
-//  @JsonBackReference
-//  private List<OrderDetail> orderDetails;
+  @OneToMany(mappedBy="product")
+  @JsonBackReference
+  private List<OrderDetail> orderDetails;
 
   public Product(Long id, String name, String description, Float price, Long quantity,
-      String imageURL, Float promotion_price, Category category) {
+      String imageURL, Float promotion_price, Category category,
+      List<OrderDetail> orderDetails) {
     this.id = id;
     this.name = name;
     this.description = description;
@@ -45,7 +47,7 @@ public class Product extends BaseEntity{
     this.imageURL = imageURL;
     this.promotion_price = promotion_price;
     this.category = category;
-    //this.orderDetails = orderDetails;
+    this.orderDetails = orderDetails;
   }
 
   public Product() {
@@ -116,11 +118,11 @@ public class Product extends BaseEntity{
     this.category = category;
   }
 
-//  public List<OrderDetail> getOrderDetails() {
-//    return orderDetails;
-//  }
-//
-//  public void setOrderDetails(List<OrderDetail> orderDetails) {
-//    this.orderDetails = orderDetails;
-//  }
+  public List<OrderDetail> getOrderDetails() {
+    return orderDetails;
+  }
+
+  public void setOrderDetails(List<OrderDetail> orderDetails) {
+    this.orderDetails = orderDetails;
+  }
 }
