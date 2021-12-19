@@ -15,8 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Table
 @Entity
+@Table
 public class OrderDetail extends BaseEntity{
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
