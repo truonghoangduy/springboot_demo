@@ -9,6 +9,7 @@ import com.example.demo.demo.services.Image.ImageService;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
 
 import java.io.IOException;
+import java.net.http.HttpClient.Redirect;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,39 +74,61 @@ public class ProductController {
     }
     return new ResponseEntity<>(product, HttpStatus.OK);
   }
-  @PutMapping("/{id}")
-  @ResponseBody
-  public ResponseEntity<?> updateProduct(@RequestBody Product product,@PathVariable Long id){
+  @PostMapping("/edit/{id}")
+  public String updateProduct(@ModelAttribute Product product,
+      @RequestParam("file") MultipartFile[] files,
+      @PathVariable Long id,Model model) throws IOException {
     Optional<Product> product1 = productService.findById(id);
     if(!product1.isPresent()){
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      return "404";
     }
-    if(product.getName().trim().isEmpty() || product.getCategory() == null ||
-        product.getDescription().trim().isEmpty() || product.getPrice() == null ||
-        product.getQuantity().intValue()==0 || product.getImageURL().trim().isEmpty() ||
-        product.getPromotion_price() == null){
-      return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
-    }
+//    if(product.getName().trim().isEmpty() || product.getCategory() == null ||
+//        product.getDescription().trim().isEmpty() || product.getPrice() == null ||
+//        product.getQuantity().intValue()==0 || product.getImageURL().trim().isEmpty() ||
+//        product.getPromotion_price() == null){
+//      return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
+//    }
+
+    String fileName = ImageService.uploadFile(files[0]);
+    String URIImage = ImageService.createURI(fileName);
+
     product1.get().setName(product.getName());
     product1.get().setDescription(product.getDescription());
     product1.get().setPrice(product.getPrice());
-    product1.get().setImageURL(product.getImageURL());
+    product1.get().setImageURL(URIImage);
     product1.get().setQuantity(product.getQuantity());
     product1.get().setPromotion_price(product.getPromotion_price());
     product1.get().setCategory(product.getCategory());
-    productService.save(product1.get());
-    return new ResponseEntity<>(new ResponseMessange("Update success!"), HttpStatus.OK);
+    var productSaved = productService.save(product1.get());
+
+    model.addAttribute("product",productSaved);
+
+
+    return "product_upload";
   }
 
-  @DeleteMapping("/{id}")
-  @ResponseBody
-  public ResponseEntity<?> deleteProductById(@PathVariable Long id){
+  @PostMapping("/create")
+  public String createNewProduct(@ModelAttribute Product product,
+      @RequestParam("file") MultipartFile[] files,Model model) throws IOException {
+
+    String fileName = ImageService.uploadFile(files[0]);
+    String URIImage = ImageService.createURI(fileName);
+
+    product.setImageURL(URIImage);
+    var productSaved = productService.save(product);
+
+    model.addAttribute("product",productSaved);
+    return "product_upload";
+  }
+
+  @GetMapping("/delete/{id}")
+  public String deleteProductById(@PathVariable Long id){
     Optional<Product> product = productService.findById(id);
     if(!product.isPresent()){
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      return "404";
     }
     productService.delete(product.get().getId());
-    return new ResponseEntity<>( new ResponseMessange("Delete success!"), HttpStatus.OK);
+    return "redirect:/";
   }
 
   @Autowired
@@ -133,5 +156,13 @@ public class ProductController {
       }
     }
     return new ResponseEntity<String>("ok", HttpStatus.OK);
+  }
+
+  @GetMapping("create")
+  public String createProduct(Model model){
+    model.addAttribute("product",new Product());
+    model.addAttribute("listOfCategory",categoryRepository.findAll());
+
+    return "product_create";
   }
 }

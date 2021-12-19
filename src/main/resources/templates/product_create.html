@@ -7,23 +7,23 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </head>
 <body>
-<form class="row" th:action="@{/product/edit/{id}(id=${product.getId()})}"
+<form class="row" th:action="@{/product/create}"
       enctype="multipart/form-data"
       th:object="${product}" th:method="post">
-  <input type="hidden" th:field="*{id}" th:value="${product.getId()}">
+<!--  <input type="hidden" th:field="*{id}" th:value="${product.getId()}">-->
   <div>
     <div class="form-group">
       <label for="formGroupExampleInput">Name</label>
-      <input type="text" th:field="*{name}" class="form-control" id="formGroupExampleInput" th:text="${product.getName()}">
+      <input type="text" th:field="*{name}" class="form-control" id="formGroupExampleInput">
     </div>
     <div class="form-group">
       <label for="formGroupDescription">Description</label>
-      <textarea type="text" class="form-control" id="formGroupDescription" th:field="*{description}"  th:text="${product.getDescription()}"></textarea>
+      <textarea type="text" class="form-control" id="formGroupDescription" th:field="*{description}" ></textarea>
     </div>
 
-    <div th:if="${product.getImageURL() != null}">
-      <img th:src="${product.getImageURL()}" class="w-50">
-    </div>
+<!--    <div th:if="${product.getImageURL() != null}">-->
+<!--      <img th:src="${product.getImageURL()}" class="w-50">-->
+<!--    </div>-->
 
     <div class="form-group">
       <label for="formGroupIMG">File</label>
@@ -33,18 +33,13 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputPrice">Price</label>
-        <input type="number" class="form-control" id="inputPrice" th:field="*{price}" th:text="${product.getPrice()}">
+        <input type="number" class="form-control" id="inputPrice" th:field="*{price}">
       </div>
       <div class="form-group col-md-4">
         <label for="inputCategory">Category</label>
         <select id="inputCategory" class="form-control" th:field="*{category}">
           <div th:each="categoryOption : ${listOfCategory}" th:remove="tag">
-              <div th:if="${product.getCategory().getId() == categoryOption.getId()}" th:remove="tag">
-                <option th:text="${product.getCategory().getName()}" selected th:value="${product.getCategory().getId()}"></option>
-              </div>
-            <div th:if="${product.getCategory().getId() != categoryOption.getId()}" th:remove="tag">
-              <option th:text="${categoryOption.getName()}" th:value="${product.getCategory().getId()}"></option>
-            </div>
+              <option th:text="${categoryOption.getName()}" th:value="${categoryOption.getId()}"></option>
           </div>
         </select>
       </div>

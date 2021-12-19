@@ -26,7 +26,7 @@ public class OrderDetail extends BaseEntity{
 
   @ManyToOne(fetch = FetchType.EAGER,targetEntity = Order.class)
   @JoinColumn(name = "order_id", nullable = false)
-  @JsonManagedReference
+  @JsonBackReference
   @NotNull
   private Order order;
 

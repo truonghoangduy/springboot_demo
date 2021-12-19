@@ -1,6 +1,7 @@
 package com.example.demo.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import java.util.List;
@@ -27,13 +28,13 @@ public class Order extends BaseEntity{
   private String phone;
   @ManyToOne(fetch = FetchType.EAGER,targetEntity = User.class)
   @JoinColumn(name = "user_id", nullable = false)
-  @JsonManagedReference
+//  @JsonIgnore
   @NotNull
   private User user;
 
 
-  @OneToMany(mappedBy="order")
-  //@JsonBackReference
+  @OneToMany(mappedBy="order",fetch = FetchType.EAGER)
+//  @JsonManagedReference
   private List<OrderDetail> orderDetails;
 
   public Order(Long id, Float total, String status, String ship_address, String phone,

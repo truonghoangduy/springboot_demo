@@ -3,6 +3,7 @@ package com.example.demo.demo.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +18,9 @@ public class User extends BaseEntity{
   private Long id;
   private String name;
   private String password;
-  @OneToMany(mappedBy="user")
-  //@JsonBackReference
+
+  @OneToMany(mappedBy="user",fetch = FetchType.LAZY,targetEntity = Order.class)
+  @JsonBackReference
   private List<Order> orders;
 
   public User(Long id, String name, String password,

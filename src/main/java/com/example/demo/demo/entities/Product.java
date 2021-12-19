@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,10 +30,10 @@ public class Product extends BaseEntity{
   @ManyToOne(fetch = FetchType.EAGER,targetEntity = Category.class)
   @JoinColumn(name = "category_id", nullable = false)
   @JsonManagedReference
-  @NotNull
+//  @NotNull
   private Category category;
 
-  @OneToMany(mappedBy="product")
+  @OneToMany(mappedBy="product",cascade = {CascadeType.ALL})
   @JsonBackReference
   private List<OrderDetail> orderDetails;
 
