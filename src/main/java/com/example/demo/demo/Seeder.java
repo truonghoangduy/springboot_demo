@@ -2,8 +2,10 @@ package com.example.demo.demo;
 
 import com.example.demo.demo.entities.Category;
 import com.example.demo.demo.entities.Product;
+import com.example.demo.demo.entities.User;
 import com.example.demo.demo.repository.Category.ICategoryRepository;
 import com.example.demo.demo.repository.Product.IProductRepository;
+import com.example.demo.demo.repository.User.IUserRepository;
 import com.example.demo.demo.services.Category.CategoryServiceImpl;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
 import com.github.javafaker.Faker;
@@ -22,6 +24,9 @@ public class Seeder implements CommandLineRunner {
   @Autowired
   ICategoryRepository categoryService;
 
+  @Autowired
+  IUserRepository userRepository;
+
   Faker faker = new Faker();
 
   @Override
@@ -31,8 +36,23 @@ public class Seeder implements CommandLineRunner {
 
 
   private  void seeder(){
+    var userList = seedUser();
     var categoryList = this.seedCategory(5);
     this.seedProduct(15,categoryList);
+
+
+  }
+
+  private List<User> seedUser(){
+    List<User> userList = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      var user = new User();
+      user.setName("springboot" + i);
+      user.setId(Long.valueOf(i));
+      user.setPassword("password");
+    }
+    userList = userRepository.saveAll(userList);
+    return  userList;
   }
 
   private List<Category> seedCategory(int numberOfCategory){
