@@ -5,7 +5,10 @@ import com.example.demo.demo.entities.Product;
 import com.example.demo.demo.repository.Category.ICategoryRepository;
 import com.example.demo.demo.response.ResponseMessange;
 import com.example.demo.demo.services.Category.CategoryServiceImpl;
+import com.example.demo.demo.services.Image.ImageService;
 import com.example.demo.demo.services.Product.ProductServiceImpl;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("product")
@@ -32,9 +28,12 @@ public class ProductController {
   @Autowired
   CategoryServiceImpl categoryService;
 
+  @Autowired
+  ImageService imageService;
+
   @PostMapping
   @ResponseBody
-  public ResponseEntity<?> createProduct(@RequestBody Product product){
+  public ResponseEntity<?> createProduct(@RequestBody Product product, @RequestParam("file") MultipartFile[] files) throws IOException {
 
     Long cateId = product.getCategory().getId();
     if(cateId == null){
@@ -50,7 +49,7 @@ public class ProductController {
     product.getPromotion_price() == null){
       return new ResponseEntity<>(new ResponseMessange("Is required!"), HttpStatus.OK);
     }
-
+    //String fileName = ImageService.uploadFile(files[0]);
     productService.save(product);
     return new ResponseEntity<>(new ResponseMessange("Create product success!"), HttpStatus.OK);
   }
@@ -120,5 +119,18 @@ public class ProductController {
     model.addAttribute("product",product.get());
     model.addAttribute("listOfCategory",categoryRepository.findAll());
     return "product_upload";
+  }
+
+  @PostMapping("/pic")
+  public ResponseEntity<String> upload(@RequestParam("file") MultipartFile[] files) {
+    for (MultipartFile file: files){
+      try{
+        String fileName = ImageService.uploadFile(file);
+        return new ResponseEntity<String>(fileName, HttpStatus.OK);
+      }catch (Exception e){
+
+      }
+    }
+    return new ResponseEntity<String>("ok", HttpStatus.OK);
   }
 }
