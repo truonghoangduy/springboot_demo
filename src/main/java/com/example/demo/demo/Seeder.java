@@ -44,7 +44,7 @@ public class Seeder implements CommandLineRunner {
     if (orderRepository.count() == 0){
       seeder();
     }
-//   seeder();
+    seeder();
   }
 
 
