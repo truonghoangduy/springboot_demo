@@ -17,19 +17,11 @@ public class OrderController {
   @Autowired
   IOrderRepository orderRepository;
 
+
   @GetMapping("/{id}")
   public ResponseEntity getOrderById(@PathVariable Long id){
     Optional<Order> order = orderRepository.findById(id);
-    if(!order.isPresent()){
-      return new ResponseEntity("Not found", HttpStatus.NOT_FOUND);
-    }
-    return new ResponseEntity(order, HttpStatus.OK);
-  }
-
-  @GetMapping("/{phone}")
-  public ResponseEntity getOrderByPhone(@PathVariable String phone){
-    Optional<Order> order = orderRepository.findOrderByPhone(phone);
-    if(!order.isPresent()){
+    if(order.isEmpty()){
       return new ResponseEntity("Not found", HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity(order, HttpStatus.OK);

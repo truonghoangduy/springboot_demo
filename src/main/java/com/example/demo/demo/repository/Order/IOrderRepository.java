@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IOrderRepository extends JpaRepository<Order,Long> {
 
-  Optional<Order> findOrderByPhone(String phone);
+  //Optional<Order> findOrderByPhone(String phone);
 }
