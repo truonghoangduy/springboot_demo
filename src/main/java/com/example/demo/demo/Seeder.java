@@ -76,7 +76,7 @@ public class Seeder implements CommandLineRunner {
       var order = new Order();
       order.setUser(userList.get(i));
       var phone = String.valueOf(i);
-      order.setPhone(("090"+phone));
+      order.setPhone(faker.phoneNumber().phoneNumber());
       order.setShip_address(faker.address().streetAddress());
 
       order = this.orderRepository.save(order);
